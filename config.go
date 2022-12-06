@@ -41,12 +41,12 @@ func GetMax() string {
 
 // GetAIKeyEnv to get OpenAI API key from environment variable
 func GetAIKeyEnv() string {
-	return os.Getenv("GPT_KEY")
+	return GetEnvVar("GPT_KEY")
 }
 
 // GetBotKeyEnv to get OpenAI API key from environment variable
 func GetBotKeyEnv() string {
-	return os.Getenv("BOT_KEY")
+	return GetEnvVar("BOT_KEY")
 }
 
 // GetModel to get OpenAI model name from config file
@@ -59,4 +59,10 @@ func GetModel() string {
 func GetPrompt() string {
 	config := InitConfig()
 	return config.Prompt
+}
+
+// GetBotPrefix to get bot prefix from config file
+func GetBotPrefix() string {
+	config := InitConfig()
+	return config.BotPrefix
 }

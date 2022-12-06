@@ -23,28 +23,8 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// if the beginning of the m.Content is "!ada " then send the rest of the message to the AI
 	if m.Content[0:len(config.BotPrefix+"genie ")] == config.BotPrefix+"genie " {
-		contentRecieved := m.Content
+		handleAiResponse(s, m, handleGenieContent(m.Content))
 
-		contentRecieved = contentRecieved[len(config.BotPrefix):]
-		contentRecieved = contentRecieved[len("genie"):]
-		prompt := GetPrompt()
-
-		AIResponse := InitAI("davinci", prompt)
-
-		// Clean up the response from the AI stop characters at . or ! or ?
-
-		//AIResponse = AIResponse[0:findStop(AIResponse)]
-
-		// if AIResponse is empty, ask the user to rephrase the question
-		if len(AIResponse) == 0 {
-			AIResponse = "I'm sorry, I didn't quite understand that. Could you rephrase your question?"
-		}
-
-		AIResponse = refineGpt3Response(AIResponse)
-		_, err := SendMessage(s, m.ChannelID, AIResponse)
-		if err != nil {
-			fmt.Println("Error sending message: ", err)
-		}
 	}
 
 	if m.Content == config.BotPrefix+"help" {
@@ -81,4 +61,30 @@ func SendMessage(dg *discordgo.Session, channelID string, message string) (*disc
 	}
 
 	return msg, nil
+}
+
+func handleGenieContent(contentReceived string) string {
+	contentReceived = contentReceived[len(GetBotPrefix()):]
+	contentReceived = contentReceived[len("genie"):]
+
+	return contentReceived
+}
+
+func handleAiResponse(s *discordgo.Session, m *discordgo.MessageCreate, contentRecieved string) {
+	prompt := GetPrompt()
+
+	AIResponses := InitAI(GetModel(), contentRecieved+prompt)
+
+	// AIResponse uni8 to string
+	AIResponse := string(AIResponses[0])
+
+	// if AIResponse is empty, ask the user to rephrase the question
+	if len(AIResponse) == 0 {
+		AIResponse = "I'm sorry, I didn't quite understand your request. Could you rephrase what you mean?"
+	}
+
+	_, err := SendMessage(s, m.ChannelID, AIResponse)
+	if err != nil {
+		fmt.Println("Error sending message: ", err)
+	}
 }

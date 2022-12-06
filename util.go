@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/spf13/viper"
+	"log"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -46,4 +48,21 @@ func GetGuildID(s *discordgo.Session, guildName string) string {
 		}
 	}
 	return ""
+}
+
+// GetEnvVar to get environment variable
+func GetEnvVar(key string) string {
+	// use viper to get bot key from environment variable
+	vippy := viper.New()
+	vippy.SetConfigName(".env")
+	vippy.SetConfigType("env")
+	vippy.AddConfigPath(".")
+	vippy.AllowEmptyEnv(false)
+	vippy.AutomaticEnv()
+	err := vippy.ReadInConfig()
+	if err != nil {
+		log.Fatal("Error reading env file: ", err)
+	}
+	key = vippy.GetString(key)
+	return key
 }

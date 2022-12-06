@@ -10,10 +10,10 @@ import (
 )
 
 // InitAI initializes the AI for the Discord bot.
-func InitAI(modelName string, prompt string) string {
+func InitAI(modelName string, prompt string) []string {
 	completion, err := OpenAICompletion(modelName, prompt)
 	if err != nil {
-		return "Error: " + err.Error()
+		return nil
 	}
 	return completion
 }

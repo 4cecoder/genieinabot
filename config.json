@@ -1,12 +1,11 @@
 {
   "bot_name": "GenieInABot",
-  "model_name": "ada",
+  "model_name": "davinci",
   "guild_name": "Byte Cats",
   "channel_name": "general",
   "bot_prefix": "!",
   "permission_integer": "8",
-  "max_tokens": "300",
-  "prompt": "just a test"
+  "max_tokens": "60",
+  "prompt": " three wishes are:\n1."
 }
-
 
