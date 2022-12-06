@@ -3,20 +3,24 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 )
 
 type Configuration struct {
-	BotToken      string `json:"bot_token"`
 	BotPrefix     string `json:"bot_prefix"`
 	PermissionInt string `json:"permission_int"`
+	GuildName     string `json:"guild_name"`
+	ChannelName   string `json:"channel_name"`
+	ModelName     string `json:"model_name"`
+	MaxTokens     string `json:"max_tokens"`
+	Prompt        string `json:"prompt"`
 }
 
 func InitConfig() Configuration {
 	config := Configuration{}
 
-	file, err := ioutil.ReadFile("config.json")
+	file, err := os.ReadFile("config.json")
 	if err != nil {
 		log.Fatal("Error reading config file: ", err)
 	}
@@ -28,4 +32,31 @@ func InitConfig() Configuration {
 	fmt.Println("Config file loaded successfully.")
 
 	return config
+}
+
+func GetMax() string {
+	config := InitConfig()
+	return config.MaxTokens
+}
+
+// GetAIKeyEnv to get OpenAI API key from environment variable
+func GetAIKeyEnv() string {
+	return os.Getenv("GPT_KEY")
+}
+
+// GetBotKeyEnv to get OpenAI API key from environment variable
+func GetBotKeyEnv() string {
+	return os.Getenv("BOT_KEY")
+}
+
+// GetModel to get OpenAI model name from config file
+func GetModel() string {
+	config := InitConfig()
+	return config.ModelName
+}
+
+// GetPrompt to get OpenAI prompt from config file
+func GetPrompt() string {
+	config := InitConfig()
+	return config.Prompt
 }

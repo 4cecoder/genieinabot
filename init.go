@@ -9,6 +9,15 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// InitAI initializes the AI for the Discord bot.
+func InitAI(modelName string, prompt string) string {
+	completion, err := OpenAICompletion(modelName, prompt)
+	if err != nil {
+		return "Error: " + err.Error()
+	}
+	return completion
+}
+
 // InitDiscord initializes a new Discord session using the provided bot token.
 func InitDiscord(token string) (*discordgo.Session, error) {
 	dg, err := discordgo.New("Bot " + token)
@@ -23,20 +32,18 @@ func InitDiscord(token string) (*discordgo.Session, error) {
 // InitHandlers initializes the event handlers for the Discord session.
 func InitHandlers(dg *discordgo.Session) {
 	dg.AddHandler(MessageCreate)
+
 	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
 }
 
 // InitBot initializes the Discord bot.
 func InitBot() (*discordgo.Session, error) {
-	config := InitConfig()
-
-	dg, err := InitDiscord(config.BotToken)
+	dg, err := InitDiscord(GetBotKeyEnv())
 	if err != nil {
 		return nil, err
 	}
 
 	InitHandlers(dg)
-
 	return dg, nil
 }
 

@@ -1,6 +1,12 @@
 {
-  "bot_token": "MTA0OTQxOTYwNzY4NzA0MTA2NQ.GdrWPn.Y943kBWi1LIQlxxoGkXf4m-j4m8eFlGjqOAOlg",
+  "bot_name": "GenieInABot",
+  "model_name": "ada",
+  "guild_name": "Byte Cats",
+  "channel_name": "general",
   "bot_prefix": "!",
   "permission_integer": "8",
-  "bot_name": "GenieInABot"
+  "max_tokens": "300",
+  "prompt": "just a test"
 }
+
+
